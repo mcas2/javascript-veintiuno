@@ -20,29 +20,37 @@ while (siguesVivo(montonJugador) && !plantarse) {
     seguirJugando(montonCasa)
 }
 
+turnoDeLaCasa(montonCasa)
 resolverJuego(montonJugador, montonCasa)
+
+
+function turnoDeLaCasa(montonCasa) {
+    while (sumarCartas(montonCasa) < 17) {
+        repartirCartas(1, montonCasa, mazo)
+    }
+}
 
 function resolverJuego(montonJugador, montonCasa) {
     console.log('Tu mano es ' + montonJugador)
     console.log('La casa tiene ' + montonCasa)
-    let puntosJugador = 0
-    let puntosCasa = 0
+    let puntosJugador = sumarCartas(montonJugador)
+    let puntosCasa = sumarCartas(montonCasa)
 
-    for (let i = 0; i < montonJugador.length; i++) {
-        puntosJugador += montonJugador[i]
-    }
-
-    for (let i = 0; i < montonCasa.length; i++) {
-        puntosCasa += montonCasa[i]
-    }
-
-    if (puntosJugador > 21 || puntosCasa > puntosJugador) {
-        console.log('La casa siempre gana');
-    } else if (puntosJugador > puntosCasa) {
-        console.log("Hemos ganado.")
+    if (puntosCasa > 21 || puntosJugador > puntosCasa && puntosJugador < 21) {
+        console.log("Hemos ganado, por poco tiempo.")
+    } else if (puntosCasa == puntosJugador){
+        console.log("Empate técnico")
     } else {
-        console.log("Cuidado")
+        console.log("La casa siempre gana")
     }
+}
+
+function sumarCartas(monton) {
+    let total = 0
+    for (let i = 0; i < monton.length; i++) {
+        total += monton[i]
+    }
+    return total
 }
 
 function seguirJugando(casa) {
@@ -68,12 +76,7 @@ function seguirJugando(casa) {
 }
 
 function siguesVivo(monton) {
-    let suma = 0
-    for (let i = 0; i < monton.length; i++) {
-        suma += monton[i]        
-    }
-
-    if (suma < 21) {
+    if (sumarCartas(monton) < 21) {
         return true
     } else {
         return false
